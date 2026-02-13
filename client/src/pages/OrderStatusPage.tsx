@@ -40,7 +40,7 @@ export const OrderStatusPage: React.FC = () => {
     if (!orderId) return;
 
     // Connect to socket and join order room
-    const socket = socketService.connect();
+    socketService.connect();
     socketService.joinOrder(orderId);
 
     // Listen for order status updates

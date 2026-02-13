@@ -11,7 +11,7 @@ export const MenuPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const { items: cartItems, getTotalItems } = useCartStore();
+  const { getTotalItems } = useCartStore();
   const totalCartItems = getTotalItems();
 
   useEffect(() => {
