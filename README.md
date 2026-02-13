@@ -293,14 +293,6 @@ cd server && npm start
 - [ ] Set up monitoring and alerts
 - [ ] Configure backup strategies
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -323,12 +315,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Clear node_modules and reinstall dependencies
 - Check Node.js version compatibility
 - Verify TypeScript configuration
-
-### Getting Help
-
-- Check the [Issues](https://github.com/your-repo/issues) page
-- Review the troubleshooting section
-- Contact the development team
 
 ## 🎯 Future Enhancements
 
