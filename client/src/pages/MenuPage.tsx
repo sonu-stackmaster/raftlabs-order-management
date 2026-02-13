@@ -37,10 +37,10 @@ export const MenuPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center fade-in">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
-            <div className="absolute inset-0 rounded-full h-16 w-16 border-4 border-transparent border-t-purple-600 animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1s' }}></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-200 border-t-primary-600 mx-auto"></div>
+            <div className="absolute inset-0 rounded-full h-16 w-16 border-4 border-transparent border-t-accent-600 animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1s' }}></div>
           </div>
-          <p className="mt-6 text-white text-lg font-medium">
+          <p className="mt-6 text-neutral-700 text-lg font-medium">
             Loading delicious menu<span className="loading-dots"></span>
           </p>
         </div>
@@ -53,8 +53,8 @@ export const MenuPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center bounce-in">
           <div className="glass-card p-8 max-w-md mx-4">
-            <div className="text-red-500 text-6xl mb-4">😞</div>
-            <p className="text-gray-700 mb-6 text-lg">{error}</p>
+            <div className="text-error-500 text-6xl mb-4">😞</div>
+            <p className="text-neutral-700 mb-6 text-lg">{error}</p>
             <button
               onClick={() => window.location.reload()}
               className="btn-primary"
@@ -73,8 +73,8 @@ export const MenuPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold gradient-text">🍽️ Delicious Bites</h1>
-              <p className="text-gray-600 mt-1">Fresh food delivered to your door</p>
+              <h1 className="text-3xl font-bold warm-gradient-text">🍽️ Delicious Bites</h1>
+              <p className="text-neutral-600 mt-1">Fresh food delivered to your door</p>
             </div>
             <Link
               to="/cart"
@@ -83,7 +83,7 @@ export const MenuPage: React.FC = () => {
               <span className="flex items-center space-x-2">
                 <span>🛒 Cart</span>
                 {totalCartItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold animate-pulse">
+                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-accent-500 to-accent-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold animate-pulse">
                     {totalCartItems}
                   </span>
                 )}
@@ -98,8 +98,8 @@ export const MenuPage: React.FC = () => {
           <div className="text-center py-20 slide-up">
             <div className="glass-card p-12 max-w-md mx-auto">
               <div className="text-6xl mb-4">🍽️</div>
-              <p className="text-gray-600 text-xl">No menu items available</p>
-              <p className="text-gray-500 mt-2">Check back soon for delicious options!</p>
+              <p className="text-neutral-600 text-xl">No menu items available</p>
+              <p className="text-neutral-500 mt-2">Check back soon for delicious options!</p>
             </div>
           </div>
         ) : (
@@ -119,9 +119,9 @@ export const MenuPage: React.FC = () => {
 
       {/* Floating background elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-pink-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-secondary-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-accent-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
     </div>
   );
