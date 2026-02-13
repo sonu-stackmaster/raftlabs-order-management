@@ -57,7 +57,13 @@ export const OrderStatusPage: React.FC = () => {
           return prevOrder;
         });
         
-        toast.success(`Order status updated: ${data.status}`);
+        toast.success(`Order status updated: ${data.status} 🎉`, {
+          icon: '📦',
+          style: {
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            color: 'white',
+          },
+        });
       }
     });
 
@@ -71,10 +77,15 @@ export const OrderStatusPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading order details...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center fade-in">
+          <div className="relative mb-8">
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
+            <div className="absolute inset-0 rounded-full h-20 w-20 border-4 border-transparent border-t-purple-600 animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          </div>
+          <p className="text-white text-xl font-medium">
+            Loading your order<span className="loading-dots"></span>
+          </p>
         </div>
       </div>
     );
@@ -82,87 +93,172 @@ export const OrderStatusPage: React.FC = () => {
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error || 'Order not found'}</p>
-          <Link
-            to="/"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-          >
-            Back to Menu
-          </Link>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center bounce-in">
+          <div className="glass-card p-12 max-w-md mx-4">
+            <div className="text-red-500 text-8xl mb-6">📦</div>
+            <h2 className="text-2xl font-bold text-gray-700 mb-4">Order Not Found</h2>
+            <p className="text-gray-500 mb-8">{error || 'We couldn\'t find your order'}</p>
+            <Link to="/" className="btn-primary">
+              🍽️ Back to Menu
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
+  const getStatusEmoji = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'pending': return '⏳';
+      case 'confirmed': return '✅';
+      case 'preparing': return '👨‍🍳';
+      case 'ready': return '🎉';
+      case 'out_for_delivery': return '🚚';
+      case 'delivered': return '✨';
+      default: return '📦';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'pending': return 'from-yellow-400 to-orange-500';
+      case 'confirmed': return 'from-blue-400 to-blue-600';
+      case 'preparing': return 'from-purple-400 to-purple-600';
+      case 'ready': return 'from-green-400 to-green-600';
+      case 'out_for_delivery': return 'from-indigo-400 to-indigo-600';
+      case 'delivered': return 'from-emerald-400 to-emerald-600';
+      default: return 'from-gray-400 to-gray-600';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Order Status</h1>
-            <Link
-              to="/"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
-            >
-              New Order
+    <div className="min-h-screen">
+      <header className="bg-white shadow-lg sticky top-0 z-[100] fade-in">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div>
+              <h1 className="text-3xl font-bold gradient-text">📦 Order Tracking</h1>
+              <p className="text-gray-600 mt-1">Track your delicious order in real-time</p>
+            </div>
+            <Link to="/" className="btn-primary">
+              🍽️ New Order
             </Link>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
+          {/* Order Status Hero */}
+          <div className="glass-card p-8 text-center slide-up">
+            <div className="text-8xl mb-4">{getStatusEmoji(order.status)}</div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              Order #{order._id.slice(-6).toUpperCase()}
+            </h2>
+            <div className={`inline-block bg-gradient-to-r ${getStatusColor(order.status)} text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg pulse-glow`}>
+              {order.status.replace('_', ' ').toUpperCase()}
+            </div>
+            <p className="text-gray-600 mt-4">
+              Last updated: {new Date(order.updatedAt).toLocaleString()}
+            </p>
+          </div>
+
           {/* Order Status Tracker */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-6 text-center">Order Progress</h2>
+          <div className="glass-card p-8 slide-up" style={{ animationDelay: '0.1s' }}>
+            <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Order Progress</h2>
             <StatusTracker currentStatus={order.status} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Order Details */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4">Order Details</h3>
-              <div className="space-y-2 text-sm">
-                <p><span className="font-medium">Order ID:</span> {order._id}</p>
-                <p><span className="font-medium">Status:</span> 
-                  <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                    {order.status}
+            <div className="glass-card p-8 slide-up" style={{ animationDelay: '0.2s' }}>
+              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span className="mr-2">📋</span>
+                Order Details
+              </h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                  <span className="font-semibold text-gray-700">Order ID:</span>
+                  <span className="font-mono text-sm bg-white px-3 py-1 rounded-lg shadow-sm">
+                    #{order._id.slice(-8).toUpperCase()}
                   </span>
-                </p>
-                <p><span className="font-medium">Order Time:</span> {new Date(order.createdAt).toLocaleString()}</p>
-                <p><span className="font-medium">Last Updated:</span> {new Date(order.updatedAt).toLocaleString()}</p>
-                <p><span className="font-medium">Total:</span> 
-                  <span className="text-green-600 font-semibold ml-1">${order.total.toFixed(2)}</span>
-                </p>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                  <span className="font-semibold text-gray-700">Order Time:</span>
+                  <span className="text-gray-600">
+                    {new Date(order.createdAt).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+                  <span className="font-semibold text-gray-700">Total Amount:</span>
+                  <span className="text-2xl font-bold text-green-600">
+                    ${order.total.toFixed(2)}
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Customer Information */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4">Delivery Information</h3>
-              <div className="space-y-2 text-sm">
-                <p><span className="font-medium">Name:</span> {order.customer.name}</p>
-                <p><span className="font-medium">Phone:</span> {order.customer.phone}</p>
-                <p><span className="font-medium">Address:</span> {order.customer.address}</p>
+            <div className="glass-card p-8 slide-up" style={{ animationDelay: '0.3s' }}>
+              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span className="mr-2">🏠</span>
+                Delivery Info
+              </h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <div className="flex items-center mb-2">
+                    <span className="text-blue-600 mr-2">👤</span>
+                    <span className="font-semibold text-gray-700">Customer:</span>
+                  </div>
+                  <p className="text-gray-800 font-medium">{order.customer.name}</p>
+                </div>
+                <div className="p-4 bg-purple-50 rounded-xl border border-purple-200">
+                  <div className="flex items-center mb-2">
+                    <span className="text-purple-600 mr-2">📱</span>
+                    <span className="font-semibold text-gray-700">Phone:</span>
+                  </div>
+                  <p className="text-gray-800 font-medium">{order.customer.phone}</p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                  <div className="flex items-center mb-2">
+                    <span className="text-green-600 mr-2">📍</span>
+                    <span className="font-semibold text-gray-700">Address:</span>
+                  </div>
+                  <p className="text-gray-800 font-medium leading-relaxed">
+                    {order.customer.address}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Order Items */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Order Items</h3>
-            <div className="space-y-3">
+          <div className="glass-card p-8 slide-up" style={{ animationDelay: '0.4s' }}>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+              <span className="mr-2">🍽️</span>
+              Your Order ({order.items.length} items)
+            </h3>
+            <div className="space-y-4">
               {order.items.map((item, index) => (
-                <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
-                  <div>
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                <div 
+                  key={index} 
+                  className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300"
+                  style={{ animationDelay: `${0.5 + index * 0.1}s` }}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                      {item.quantity}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-800 text-lg">{item.name}</p>
+                      <p className="text-gray-600">${item.price.toFixed(2)} each</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
-                    <p className="text-sm text-gray-600">${item.price.toFixed(2)} each</p>
+                    <p className="font-bold text-xl text-green-600">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -170,16 +266,23 @@ export const OrderStatusPage: React.FC = () => {
           </div>
 
           {/* Real-time Updates Notice */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-3"></div>
-              <p className="text-blue-800 text-sm">
-                This page updates automatically. You'll receive notifications when your order status changes.
+          <div className="glass-card p-6 slide-up" style={{ animationDelay: '0.5s' }}>
+            <div className="flex items-center justify-center space-x-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <p className="text-gray-700 font-medium">
+                🔄 This page updates automatically - you'll get notified of any changes!
               </p>
+              <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
             </div>
           </div>
         </div>
       </main>
+
+      {/* Floating background elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-green-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
     </div>
   );
 };
